@@ -534,21 +534,23 @@ $websites = Get-Website
 
 foreach ($site in $websites) {
     $siteName = $site.Name
-    
-    # Check the customErrors configuration
-    $customErrors = Get-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST/$siteName" -filter 'system.web/customErrors' -name 'mode' -ErrorAction SilentlyContinue
-
-    if ($customErrors) {
-        if ($customErrors -eq 'RemoteOnly' -or $customErrors -eq 'On') {
-            Write-Host "Site: '$siteName' - customErrors mode is set to '$($customErrors)' (Good)" -ForegroundColor Green
+    try {
+        # Get the tracing configuration for the site
+        $traceEnabled = Get-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST/$siteName" -filter "system.web/trace" -name "enabled" -ErrorAction SilentlyContinue
+        
+        if ($traceEnabled) {
+            if ($traceEnabled.Value -eq $true) {
+                Write-Host "Site: '$siteName' - ASP.NET tracing is ENABLED (Bad)" -ForegroundColor Red
+            } else {
+                Write-Host "Site: '$siteName' - ASP.NET tracing is DISABLED (Good)" -ForegroundColor Green
+            }
         } else {
-            Write-Host "Site: '$siteName' - customErrors mode is set to '$($customErrors)' (Bad)" -ForegroundColor Red
+            Write-Host "Site: '$siteName' - Tracing configuration not found (Check manually)." -ForegroundColor Yellow
         }
-    } else {
-        Write-Host "Site: '$siteName' - customErrors configuration not found (Check manually)." -ForegroundColor Yellow
+    } catch {
+        Write-Host "Site: '$siteName' - Error retrieving tracing configuration: $_" -ForegroundColor Red
     }
 }
-
 # ----------------------
 # 3.6 (L2) Ensure 'httpcookie' mode is configured for session state (Automated)[ASP.NET Configuration Recommendations]
 # ----------------------
