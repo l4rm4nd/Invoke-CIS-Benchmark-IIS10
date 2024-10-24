@@ -233,11 +233,11 @@ foreach ($site in $websites) {
 
     # Determine authentication status
     if ($anonymousAuth -and $anonymousAuth.Value -eq $true) {
-        Write-Host "Site: '$siteName' - Authentication: Anonymous (Yellow)" -ForegroundColor Yellow
+        Write-Host "Site: '$siteName' - Authentication: Anonymous (Warning)" -ForegroundColor Yellow
     } elseif ($windowsAuth -and $windowsAuth.Value -eq $true) {
-        Write-Host "Site: '$siteName' - Authentication: Windows (Green)" -ForegroundColor Green
+        Write-Host "Site: '$siteName' - Authentication: Windows (Good)" -ForegroundColor Green
     } else {
-        Write-Host "Site: '$siteName' - Authentication: Other or Not Configured (Red)" -ForegroundColor Red
+        Write-Host "Site: '$siteName' - Authentication: Other or Not Configured" -ForegroundColor Red
     }
 }
 
