@@ -655,17 +655,26 @@ foreach ($site in $websites) {
 # ----------------------
 Write-Host ""
 Write-Host "3.9 (L1) Ensure 'MachineKey validation method - .Net 4.5' is configured (Automated)" -ForegroundColor Cyan
-# Get the global .NET Trust Level
-$trustLevel = Get-WebConfigurationProperty -pspath 'MACHINE/WEBROOT' -filter "system.web/trust" -name "level" -ErrorAction SilentlyContinue
+# Get all websites on the server
+$websites = Get-Website
 
-if ($trustLevel) {
-    if ($trustLevel.Value -eq 'Medium') {
-        Write-Host "Global .NET Trust Level is set to Medium (Good)" -ForegroundColor Green
-    } else {
-        Write-Host "Global .NET Trust Level is set to '$($trustLevel.Value)' (Bad)" -ForegroundColor Red
+# Loop through each website and check the machineKey validation method
+foreach ($site in $websites) {
+    $siteName = $site.Name
+    try {
+        # Get the validation method of the machineKey for each website
+        $validationMethod = Get-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST/$siteName" -filter "system.web/machineKey" -name "validation"
+
+        # Display the result for each website
+        if ($validationMethod -ne $null) {
+            Write-Host "Website: $siteName - MachineKey Validation Method: $validationMethod (Good)" -ForegroundColor Green
+        } else {
+            Write-Host "Website: $siteName - MachineKey Validation Method: Not Configured (Bad)" -ForegroundColor Yellow
+        }
+    } catch {
+        # Handle cases where machineKey might not be configured or there's an error
+        Write-Host "Website: $siteName - Error retrieving MachineKey Validation Method" -ForegroundColor Red
     }
-} else {
-    Write-Host "Global .NET Trust Level configuration not found (Check manually)." -ForegroundColor Yellow
 }
 
 # ----------------------
