@@ -43,8 +43,6 @@ foreach ($site in $websites) {
 Write-Host ""
 Write-Host "1.2 (L1) Ensure 'Host headers' are on all sites (Automated)" -ForegroundColor Cyan
 
-Write-Host "Checking for sites without host headers..." -ForegroundColor Cyan
-
 # Get all site bindings
 $bindings = Get-WebBinding -Port *
 
