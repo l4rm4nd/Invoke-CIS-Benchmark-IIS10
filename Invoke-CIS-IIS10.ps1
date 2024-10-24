@@ -810,13 +810,18 @@ foreach ($site in $websites) {
 
         # Access the .Value property to get the actual number
         if ($maxUrlLength.Value -ne $null) {
-            Write-Host "Website: $siteName - maxUrl: $($maxUrlLength.Value) characters" -ForegroundColor Green
+            if ($maxUrlLength.Value -eq 4096) {  # Default value example
+                Write-Host "Website: $siteName - maxUrl: $($maxUrlLength.Value) characters; default (Good)" -ForegroundColor Green
+            } elseif ($maxUrlLength.Value -gt 4096) {
+                Write-Host "Website: $siteName - maxUrl: $($maxUrlLength.Value) characters; non-default (Warning)" -ForegroundColor Yellow
+            } else {
+                Write-Host "Website: $siteName - maxUrl: $($maxUrlLength.Value) characters; less than default (Bad)" -ForegroundColor Red
+            }
         } else {
-            Write-Host "Website: $siteName - maxUrl is not configured" -ForegroundColor Yellow
+            Write-Host "Website: $siteName - maxUrl is not configured (Bad)" -ForegroundColor Red
         }
 
     } catch {
-        # Handle cases where the requestLimits section might not be configured or there's an error
         Write-Host "Website: $siteName - Error retrieving maxUrl configuration" -ForegroundColor Red
     }
 }
@@ -837,13 +842,18 @@ foreach ($site in $websites) {
 
         # Access the .Value property to get the actual number
         if ($maxQueryStringLength.Value -ne $null) {
-            Write-Host "Website: $siteName - maxQueryString: $($maxQueryStringLength.Value) characters" -ForegroundColor Green
+            if ($maxQueryStringLength.Value -eq 2048) {  # Default value example
+                Write-Host "Website: $siteName - maxQueryString: $($maxQueryStringLength.Value) characters; default (Good)" -ForegroundColor Green
+            } elseif ($maxQueryStringLength.Value -gt 2048) {
+                Write-Host "Website: $siteName - maxQueryString: $($maxQueryStringLength.Value) characters; non-default (Warning)" -ForegroundColor Yellow
+            } else {
+                Write-Host "Website: $siteName - maxQueryString: $($maxQueryStringLength.Value) characters; less than default (Bad)" -ForegroundColor Red
+            }
         } else {
-            Write-Host "Website: $siteName - maxQueryString is not configured" -ForegroundColor Yellow
+            Write-Host "Website: $siteName - maxQueryString is not configured (Bad)" -ForegroundColor Red
         }
 
     } catch {
-        # Handle cases where the requestLimits section might not be configured or there's an error
         Write-Host "Website: $siteName - Error retrieving maxQueryString configuration" -ForegroundColor Red
     }
 }
