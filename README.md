@@ -1,6 +1,8 @@
 # Invoke-CIS-Benchmark-IIS10
 PowerShell Script to Automate CIS Benchmark Auditing for Microsoft IIS 10
 
+Based on CIS_Microsoft_IIS_10_Benchmark_v1.2.1.pdf.
+
 ## Usage
 
 ````
