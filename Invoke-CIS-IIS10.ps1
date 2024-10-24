@@ -43,9 +43,49 @@ foreach ($site in $websites) {
 Write-Host ""
 Write-Host "1.2 (L1) Ensure 'Host headers' are on all sites (Automated)" -ForegroundColor Cyan
 
+Write-Host "Checking for sites without host headers..." -ForegroundColor Cyan
+
+# Get all site bindings
+$bindings = Get-WebBinding -Port *
+
+# Loop through each binding and check for host headers
+foreach ($binding in $bindings) {
+    # Extract the binding information
+    $bindingInfo = $binding.BindingInformation
+
+    # Check if the binding information contains a host header
+    if ($bindingInfo -match ":\d+:") {
+        # Attempt to extract the site name from the binding object
+        $siteName = if ($binding.ItemPSPath) {
+            $binding.ItemPSPath.Split('/')[-1]  # Extract site name if ItemPSPath is not null
+        } else {
+            "Unknown Site"  # Fallback if site name is not available
+        }
+
+        $hostHeader = $bindingInfo.Split(':')[2]  # Get the host header (3rd element)
+
+        if ([string]::IsNullOrEmpty($hostHeader)) {
+            Write-Host "Site: '$siteName' - Binding: $bindingInfo (No Host Header Configured - Bad)" -ForegroundColor Red
+        } else {
+            Write-Host "Site: '$siteName' - Binding: $bindingInfo (Host Header Configured - Good)" -ForegroundColor Green
+        }
+    } else {
+        # If binding does not match expected format, handle it
+        $siteName = if ($binding.ItemPSPath) {
+            $binding.ItemPSPath.Split('/')[-1]  # Extract site name if ItemPSPath is not null
+        } else {
+            "Unknown Site"  # Fallback if site name is not available
+        }
+
+        Write-Host "Site: '$siteName' - Binding: $bindingInfo (No Host Header Configured - Bad)" -ForegroundColor Red
+    }
+}
+
 # ----------------------
 # 1.3 (L1) Ensure 'Directory browsing' is set to Disabled (Automated)[Basic Configurations]
 # ----------------------
+Write-Host ""
+Write-Host "1.3 (L1) Ensure 'Directory browsing' is set to Disabled (Automated)" -ForegroundColor Cyan
 # Check Directory Browsing Configuration
 $directoryBrowsing = Get-WebConfigurationProperty -Filter system.webServer/directoryBrowse -PSPath iis:\ -Name Enabled
 
