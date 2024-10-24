@@ -97,6 +97,8 @@ if ($directoryBrowsing.Value -eq $false) {
 # ----------------------
 # 1.4 (L1) Ensure 'application pool identity' is configured for all application pools (Automated) [Basic Configurations]
 # ----------------------
+Write-Host ""
+Write-Host "1.4 (L1) Ensure 'application pool identity' is configured for all application pools (Automated)" -ForegroundColor Cyan
 # Get Application Pools and check their identity type
 $appPools = Get-ChildItem -Path IIS:\AppPools\
 
