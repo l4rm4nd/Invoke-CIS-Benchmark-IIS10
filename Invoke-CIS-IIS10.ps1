@@ -655,28 +655,29 @@ foreach ($site in $websites) {
 # ----------------------
 Write-Host ""
 Write-Host "3.9 (L1) Ensure 'MachineKey validation method - .Net 4.5' is configured (Automated)" -ForegroundColor Cyan
-# Get all websites on the server
+
+# Get all websites
 $websites = Get-Website
 
-# Loop through each website and check the machineKey validation method
 foreach ($site in $websites) {
     $siteName = $site.Name
     try {
-        # Get the validation method of the machineKey for each website
-        $validationMethod = Get-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST/$siteName" -filter "system.web/machineKey" -name "validation"
+        # Get the Machine Key validation method for each site
+        $validationMethod = Get-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST/$siteName" -filter "system.web/machineKey" -name "validation" -ErrorAction SilentlyContinue
 
-        # Display the result for each website
-        if ($validationMethod -eq "HMACSHA256" -or $validationMethod -eq "SHA256") {
-            Write-Host "Website: $siteName - MachineKey Validation Method: $validationMethod (Good)" -ForegroundColor Green
+        if ($validationMethod) {
+            if ($validationMethod -eq "HMACSHA256" -or $validationMethod -eq "SHA256") {
+                Write-Host "Site: '$siteName' - Machine Key validation method is set to HMACSHA256 (Good)" -ForegroundColor Green
+            } else {
+                Write-Host "Site: '$siteName' - Machine Key validation method is set to '$($validationMethod)' (Bad)" -ForegroundColor Red
+            }
         } else {
-            Write-Host "Website: $siteName - MachineKey Validation Method: Not Configured (Bad)" -ForegroundColor Yellow
+            Write-Host "Site: '$siteName' - Machine Key validation configuration not found (Check manually)." -ForegroundColor Yellow
         }
     } catch {
-        # Handle cases where machineKey might not be configured or there's an error
-        Write-Host "Website: $siteName - Error retrieving MachineKey Validation Method" -ForegroundColor Red
+        Write-Host "Site: '$siteName' - Error retrieving Machine Key validation configuration: $_" -ForegroundColor Red
     }
 }
-
 # ----------------------
 # 3.10 (L1) Ensure global .NET trust level is configured (Automated) [ASP.NET Configuration Recommendations]
 # ----------------------
