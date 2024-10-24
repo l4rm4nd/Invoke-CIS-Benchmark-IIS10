@@ -666,7 +666,7 @@ foreach ($site in $websites) {
         $validationMethod = Get-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST/$siteName" -filter "system.web/machineKey" -name "validation"
 
         # Display the result for each website
-        if ($validationMethod -ne $null) {
+        if ($validationMethod -eq "HMACSHA256" -or $validationMethod -eq "SHA256") {
             Write-Host "Website: $siteName - MachineKey Validation Method: $validationMethod (Good)" -ForegroundColor Green
         } else {
             Write-Host "Website: $siteName - MachineKey Validation Method: Not Configured (Bad)" -ForegroundColor Yellow
