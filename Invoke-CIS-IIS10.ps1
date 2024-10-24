@@ -91,6 +91,7 @@ if ($directoryBrowsing.Value -eq $false) {
 } else {
     Write-Host "Directory Browsing is ENABLED (Bad)" -ForegroundColor Red
 }
+
 # ----------------------
 # 1.4 (L1) Ensure 'application pool identity' is configured for all application pools (Automated) [Basic Configurations]
 # ----------------------
@@ -106,6 +107,7 @@ foreach ($pool in $appPools) {
         Write-Host "Application Pool: $($pool.Name) - Identity Type is NOT ApplicationPoolIdentity (Bad)" -ForegroundColor Red
     }
 }
+
 # ----------------------
 # 1.5 (L1) Ensure 'unique application pools' is set for sites (Automated)[Basic Configurations]
 # ----------------------
@@ -128,6 +130,7 @@ foreach ($group in $grouped) {
         Write-Host "Application Pool: $($group.Name) is unique to site: $($group.Group[0].Name)" -ForegroundColor Green
     }
 }
+
 # ----------------------
 # 1.6 (L1) Ensure 'application pool identity' is configured for anonymous user identity (Automated)[Basic Configurations]
 # ----------------------
@@ -370,6 +373,7 @@ foreach ($site in $websites) {
         Write-Host "Site: '$siteName' - Credentials element is NOT present (Good)" -ForegroundColor Green
     }
 }
+
 # ----------------------
 # 2.8 (L2) Ensure 'credentials' are not stored in configuration files (Automated) [Configure Authentication and Authorization]
 # ----------------------
@@ -523,6 +527,7 @@ foreach ($site in $websites) {
         }
     }
 }
+
 # ----------------------
 # 3.5 (L2) Ensure ASP.NET stack tracing is not enabled (Automated)[ASP.NET Configuration Recommendations]
 # ----------------------
@@ -550,6 +555,7 @@ foreach ($site in $websites) {
         Write-Host "Site: '$siteName' - Error retrieving tracing configuration: $_" -ForegroundColor Red
     }
 }
+
 # ----------------------
 # 3.6 (L2) Ensure 'httpcookie' mode is configured for session state (Automated)[ASP.NET Configuration Recommendations]
 # ----------------------
@@ -677,6 +683,7 @@ foreach ($site in $websites) {
         Write-Host "Site: '$siteName' - Error retrieving Machine Key validation configuration: $_" -ForegroundColor Red
     }
 }
+
 # ----------------------
 # 3.10 (L1) Ensure global .NET trust level is configured (Automated) [ASP.NET Configuration Recommendations]
 # ----------------------
@@ -888,7 +895,6 @@ foreach ($site in $websites) {
     }
 }
 
-
 # ----------------------
 # 4.5 (L1) Ensure Double-Encoded requests will be rejected (Automated)[Request Filtering and Other Restriction Modules]
 # ----------------------
@@ -919,6 +925,7 @@ foreach ($site in $websites) {
         Write-Host "Website: $siteName - Error retrieving allowDoubleEscaping configuration" -ForegroundColor Red
     }
 }
+
 # ----------------------
 # 4.6 (L1) Ensure 'HTTP Trace Method' is disabled (Manual)[Request Filtering and Other Restriction Modules]
 # ----------------------
@@ -943,6 +950,7 @@ foreach ($site in $websites) {
         Write-Host "Website: $siteName - Error retrieving requestFiltering configuration" -ForegroundColor Red
     }
 }
+
 # ----------------------
 # 4.7 (L1) Ensure Unlisted File Extensions are not allowed (Automated)[Request Filtering and Other Restriction Modules]
 # ----------------------
@@ -1004,6 +1012,7 @@ foreach ($site in $websites) {
         Write-Host "Website: $siteName - Error retrieving accessPolicy configuration" -ForegroundColor Red
     }
 }
+
 # ----------------------
 # 4.9 (L1) Ensure 'notListedIsapisAllowed' is set to false (Automated)[Request Filtering and Other Restriction Modules]
 # ----------------------
@@ -1065,6 +1074,7 @@ foreach ($site in $websites) {
         Write-Host "Website: $siteName - Error retrieving notListedCgisAllowed configuration" -ForegroundColor Red
     }
 }
+
 # ----------------------
 # 4.11 (L1) Ensure 'Dynamic IP Address Restrictions' is enabled (Manual)[Request Filtering and Other Restriction Modules]
 # ----------------------
@@ -1127,6 +1137,7 @@ foreach ($site in $websites) {
         Write-Host "Website: $siteName - Error retrieving log file directory" -ForegroundColor Red
     }
 }
+
 # ----------------------
 # 5.2 (L1) Ensure Advanced IIS logging is enabled (Automated)[IIS Logging Recommendations]
 # ----------------------
@@ -1140,6 +1151,7 @@ Write-Host "Manual audit required. Not automated." -ForegroundColor Red
 Write-Host ""
 Write-Host "5.3 (L1) Ensure 'ETW Logging' is enabled (Manual)" -ForegroundColor Cyan
 Write-Host "Manual audit required. Not automated." -ForegroundColor Red
+
 # ----------------------
 # 6.1 (L1) Ensure FTP requests are encrypted (Manual)[FTP Requests]
 # ----------------------
@@ -1168,6 +1180,7 @@ foreach ($site in $websites) {
         Write-Host "Website: $siteName - Error retrieving SSL policy configurations" -ForegroundColor Red
     }
 }
+
 # ----------------------
 # 6.2 (L1) Ensure FTP Logon attempt restrictions is enabled (Manual)[FTP Requests]
 # ----------------------
@@ -1193,6 +1206,7 @@ foreach ($site in $websites) {
         Write-Host "Website: $siteName - Error retrieving denyByFailure configuration" -ForegroundColor Red
     }
 }
+
 # ----------------------
 # 7.1 (L2) Ensure HSTS Header is set (Manual) [Transport Encryption]
 # ----------------------
@@ -1218,6 +1232,7 @@ foreach ($site in $websites) {
         Write-Host "Website: $siteName - Error retrieving HSTS configuration" -ForegroundColor Red
     }
 }
+
 # ----------------------
 # 7.2 (L1) Ensure SSLv2 is Disabled (Automated)[Transport Encryption]
 # ----------------------
