@@ -777,9 +777,15 @@ foreach ($site in $websites) {
 
         # Access the .Value property to get the actual number
         if ($maxAllowedContentLength.Value -ne $null) {
-            Write-Host "Website: $siteName - maxAllowedContentLength: $($maxAllowedContentLength.Value) bytes" -ForegroundColor Green
+            if ($maxAllowedContentLength.Value -eq 30000000) {
+                Write-Host "Website: $siteName - maxAllowedContentLength: $($maxAllowedContentLength.Value) bytes; default (Good)" -ForegroundColor Green
+            } elseif ($maxAllowedContentLength.Value -gt 30000000) {
+                Write-Host "Website: $siteName - maxAllowedContentLength: $($maxAllowedContentLength.Value) bytes; non-default (Warning)" -ForegroundColor Yellow
+            } else {
+                Write-Host "Website: $siteName - maxAllowedContentLength: $($maxAllowedContentLength.Value) bytes; less than default (Red)" -ForegroundColor Red
+            }
         } else {
-            Write-Host "Website: $siteName - maxAllowedContentLength is not configured" -ForegroundColor Yellow
+            Write-Host "Website: $siteName - maxAllowedContentLength is not configured (Bad)" -ForegroundColor Red
         }
 
     } catch {
