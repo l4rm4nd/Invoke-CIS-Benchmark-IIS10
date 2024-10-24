@@ -693,10 +693,10 @@ foreach ($site in $websites) {
         $trustLevel = Get-WebConfigurationProperty -pspath "MACHINE/WEBROOT/APPHOST/$siteName" -filter "system.web/trust" -name "level"
 
         # Access the value property directly
-        if ($trustLevel.Value -ne $null) {
-            Write-Host "Website: $siteName - .NET Trust Level: $($trustLevel.Value)" -ForegroundColor Green
+        if ($trustLevel.Value -eq "Medium" -or $trustLevel.Value -eq "Medium (web_mediumtrust.config)") {
+            Write-Host "Website: $siteName - .NET Trust Level: $($trustLevel.Value) (Good)" -ForegroundColor Green
         } else {
-            Write-Host "Website: $siteName - .NET Trust Level: Not Configured" -ForegroundColor Yellow
+            Write-Host "Website: $siteName - .NET Trust Level: $($trustLevel.Value) (Bad)" -ForegroundColor Red
         }
     } catch {
         # Handle cases where trust level might not be configured or there's an error
