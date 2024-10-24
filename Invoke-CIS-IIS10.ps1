@@ -135,17 +135,18 @@ foreach ($group in $grouped) {
 Write-Host ""
 Write-Host "1.6 (L1) Ensure 'application pool identity' is configured for anonymous user identity (Automated)" -ForegroundColor Cyan
 
-Get-WebConfiguration system.webServer/security/authentication/anonymousAuthentication -Recurse | 
-Where-Object { $_.enabled -eq $true } | 
-Select-Object location, @{Name='userName'; Expression={ $_.userName }}
+# Retrieve configurations for anonymous authentication
+$anonymousAuthConfigs = Get-WebConfiguration system.webServer/security/authentication/anonymousAuthentication -Recurse | 
+    Where-Object { $_.enabled -eq $true }
 
-Get-WebConfiguration system.webServer/security/authentication/anonymousAuthentication -Recurse | 
-Where-Object { $_.enabled -eq $true } | 
-ForEach-Object {
-    if ($_.userName -eq "") {
-        Write-Host "Anonymous Authentication is enabled at location '$($_.location)' with userName set to blank (Good)" -ForegroundColor Green
+foreach ($config in $anonymousAuthConfigs) {
+    $location = $config.location
+    $userName = $config.userName
+
+    if ($userName -eq "") {
+        Write-Host "Anonymous Authentication is enabled at location '$location' with userName set to blank (Good)" -ForegroundColor Green
     } else {
-        Write-Host "Anonymous Authentication is enabled at location '$($_.location)' but userName is NOT blank (Bad)" -ForegroundColor Red
+        Write-Host "Anonymous Authentication is enabled at location '$location' but userName is NOT blank: '$userName' (Bad)" -ForegroundColor Red
     }
 }
 
