@@ -4,8 +4,7 @@
     It provides checks for various security settings as per the CIS Microsoft IIS 10 Benchmark v1.2.1.
 
 .DESCRIPTION
-    This script performs audits based on the specified benchmark items, allowing for individual 
-    checks and the option to save outputs for later review.
+    This script performs audits based on the specified benchmark items. The results are printed in the PowerShell terminal.
 
 .AUTHOR
     [LRVT] https://github.com/l4rm4nd
