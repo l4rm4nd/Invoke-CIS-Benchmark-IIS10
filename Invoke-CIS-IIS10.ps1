@@ -24,7 +24,8 @@ $systemPartition = (Get-PSDrive C).Root
 # Loop through each website and check the partition
 foreach ($site in $websites) {
     $physicalPath = $site.PhysicalPath
-
+    $physicalPath = [Environment]::ExpandEnvironmentVariables($physicalPath)
+    
     # Get the partition (drive letter) of the physical path
     $sitePartition = [System.IO.Path]::GetPathRoot($physicalPath)
 
